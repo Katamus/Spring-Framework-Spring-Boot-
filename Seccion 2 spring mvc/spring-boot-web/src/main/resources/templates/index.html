@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
 <meta charset="ISO-8859-1">
-<title>Spring boot</title>
+<title th:text="${titulo}" ></title>
 </head>
 <body>
-	<h1>
-		Curso de spring boot
-	</h2>
+	<h1 th:text="${titulo}" ></h2>
 </body>
 </html>
