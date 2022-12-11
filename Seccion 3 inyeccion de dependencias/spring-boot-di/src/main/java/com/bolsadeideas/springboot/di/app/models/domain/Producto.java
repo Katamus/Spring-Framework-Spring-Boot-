@@ -22,4 +22,9 @@ public class Producto {
 		this.precio = precio;
 	}
 
+	public Producto(String nombre, Integer precio) {
+		this.nombre = nombre;
+		this.precio = precio;
+	}
+	
 }

@@ -22,4 +22,11 @@ public class ItemFactura {
 		this.cantidad = cantidad;
 	}
 
+	public ItemFactura(Producto producto, Integer cantidad) {
+		this.producto = producto;
+		this.cantidad = cantidad;
+	}
+	
+	
+
 }
