@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 @Component
+@RequestScope
 public class Factura {
+	
 
 	@Value("${factura.descripcion}")
 	private String descripcion;
