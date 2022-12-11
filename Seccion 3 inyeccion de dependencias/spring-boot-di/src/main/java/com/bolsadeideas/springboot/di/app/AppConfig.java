@@ -27,6 +27,7 @@ public class AppConfig {
 		return new MiServicioComplejo();
 	}
 	
+	@Bean
 	public List<ItemFactura> registrarItems(){
 		Producto producto1 = new Producto("Camara Sony", 100);
 		Producto producto2 = new Producto("Bicicleta Bianchi aro 26", 200);
