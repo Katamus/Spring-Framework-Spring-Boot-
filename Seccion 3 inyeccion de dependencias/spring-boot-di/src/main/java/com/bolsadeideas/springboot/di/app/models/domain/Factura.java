@@ -42,6 +42,5 @@ public class Factura {
 	public void setItems(List<ItemFactura> items) {
 		this.items = items;
 	}
-	/**/
 
 }
