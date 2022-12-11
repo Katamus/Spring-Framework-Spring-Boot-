@@ -8,24 +8,24 @@
 	<h1>Enviar parámetros del Request HTTP GET - URL</h1>
 	<ul>
 		<li>
-		<a th:href="@{/params/string(texto='Hola Andres')}">
-			/params/string?texto=Hola Andres
-		</a>
+			<a th:href="@{/params/string(texto='Hola Andres')}">
+				/params/string?texto=Hola Andres
+			</a>
 		</li>
 		<li>
-		<a th:href="@{/params/string(texto='Que tal Jhon!')}">
-			/params/string?texto=Que tal Jhon!
-		</a>
+			<a th:href="@{/params/string(texto='Que tal Jhon!')}">
+				/params/string?texto=Que tal Jhon!
+			</a>
 		</li>
 		<li>
-		<a th:href="@{/params/mix-params(saludo='Como estas Andrés',numero = 7)}">
-			/params/mix-params/string?saludo=Como estas Andrés&numero = 7
-		</a>
+			<a th:href="@{/params/mix-params(saludo='Como estas Andrés',numero = 7)}">
+				/params/mix-params/string?saludo=Como estas Andrés&numero = 7
+			</a>
 		</li>
 		<li>
-		<a th:href="@{/params/mix-params-request(saludo='Como estas Andrés',numero = 7)}">
-			/params/mix-params-request/string?saludo=Como estas Andrés&numero = 7
-		</a>
+			<a th:href="@{/params/mix-params-request(saludo='Como estas Andrés',numero = 7)}">
+				/params/mix-params-request/string?saludo=Como estas Andrés&numero = 7
+			</a>
 		</li>
 	</ul>
 </body>
