@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.form.app.models.domain;
 
 import java.util.Date;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -45,8 +46,8 @@ public class Usuario {
 	@Max(5000)
 	private Integer cuenta;
 	
-	@NotEmpty
-	private String pais;
+	@Valid
+	private Pais pais;
 	
 	
 	public String getUsername() {
@@ -97,10 +98,10 @@ public class Usuario {
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
-	public String getPais() {
+	public Pais getPais() {
 		return pais;
 	}
-	public void setPais(String pais) {
+	public void setPais(Pais pais) {
 		this.pais = pais;
 	}
 
