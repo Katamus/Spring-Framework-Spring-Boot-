@@ -1,7 +1,10 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -13,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -40,6 +44,7 @@ public class FormController {
 	
 	@GetMapping("/form")
 	public String form(Model model) {
+		
 		Usuario usuario = new Usuario();
 		usuario.setNombre("Jhon");
 		usuario.setApellido("Doe");
@@ -59,6 +64,11 @@ public class FormController {
 		model.addAttribute("usuario",usuario);
 		status.setComplete();
 		return "resultado";
+	}
+	
+	@ModelAttribute("paises")
+	public List<String> paises(){
+		return Arrays.asList("España","Mexico","Chile","Argenteina","Perú","Colombia","Venezuela");
 	}
 
 }
