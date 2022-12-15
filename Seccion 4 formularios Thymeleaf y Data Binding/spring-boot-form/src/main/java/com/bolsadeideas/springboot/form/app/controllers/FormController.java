@@ -1,6 +1,8 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
+import java.beans.PropertyEditorSupport;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +39,9 @@ public class FormController {
 	
 	@Autowired
 	private PaisService paisService;
+	
+	@Autowired
+	private PropertyEditorSupport propertyEditorSupport;  
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -46,6 +51,7 @@ public class FormController {
 		binder.registerCustomEditor(Date.class, "fechaNacimiento", new CustomDateEditor(dateFormat, true));
 		binder.registerCustomEditor(String.class, "nombre", new NombreEditor());
 		binder.registerCustomEditor(String.class, "apellido", new NombreEditor());
+		binder.registerCustomEditor(Pais.class, "pais", propertyEditorSupport);
 	}
 
 	@GetMapping("/form")
@@ -95,6 +101,15 @@ public class FormController {
 
 		return paisService.listar();
 
+	}
+	
+	@ModelAttribute("listaRolesString")
+	public List<String> listaRolesString(){
+		List<String> data = new ArrayList<>();
+		data.add("ROLE_ADMIN");
+		data.add("ROLE_USER");
+		data.add("ROLE_MODERATOR");
+		return data;
 	}
 
 }
