@@ -82,6 +82,8 @@ public class FormController {
 		model.addAttribute("titulo", "Formulario usuario");
 		model.addAttribute("usuario", usuario);
 		usuario.setValorSecreto("Algo muy secreto");
+		usuario.setPais(new Pais(3, "CL", "Chile"));
+		usuario.setRoles(Arrays.asList(new Role(1,"Administrador","ROLE_ADMIN")));
 		return "form";
 	}
 

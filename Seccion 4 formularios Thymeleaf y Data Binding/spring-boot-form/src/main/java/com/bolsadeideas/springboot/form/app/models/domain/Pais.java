@@ -44,6 +44,11 @@ public class Pais {
 		this.codigo = codigo;
 		this.nombre = nombre;
 	}
+
+	@Override
+	public String toString() {
+		return this.id.toString();
+	}
 	
 	
 
