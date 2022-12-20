@@ -57,6 +57,8 @@ public class Usuario {
 	@NotEmpty
 	private String genero;
 	
+	private String valorSecreto;
+	
 	
 	public String getUsername() {
 		return username;
@@ -129,6 +131,12 @@ public class Usuario {
 	}
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+	public String getValorSecreto() {
+		return valorSecreto;
+	}
+	public void setValorSecreto(String valorSecreto) {
+		this.valorSecreto = valorSecreto;
 	}
 
 	
