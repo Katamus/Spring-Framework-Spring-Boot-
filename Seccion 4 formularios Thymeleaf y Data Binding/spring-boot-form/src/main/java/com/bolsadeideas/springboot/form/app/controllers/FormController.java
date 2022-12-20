@@ -141,5 +141,10 @@ public class FormController {
 	public List<Role> listaRoles() {
 		return this.roleService.listar();
 	}
+	
+	@ModelAttribute("generos")
+	public List<String> genero() {
+		return Arrays.asList("Hombre","Mujer");
+	}
 
 }
