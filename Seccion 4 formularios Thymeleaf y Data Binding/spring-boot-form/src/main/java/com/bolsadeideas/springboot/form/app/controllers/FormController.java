@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +26,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.form.app.editors.NombreEditor;
+import com.bolsadeideas.springboot.form.app.editors.PaisPropertyEditor;
+import com.bolsadeideas.springboot.form.app.editors.RolesEditor;
 import com.bolsadeideas.springboot.form.app.models.domain.Pais;
 import com.bolsadeideas.springboot.form.app.models.domain.Role;
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
 import com.bolsadeideas.springboot.form.app.services.PaisService;
 import com.bolsadeideas.springboot.form.app.services.RoleService;
 import com.bolsadeideas.springboot.form.app.validation.UsuarioValidador;
+import com.fasterxml.jackson.core.sym.Name;
 
 @Controller
 @SessionAttributes("usuario")
@@ -46,7 +50,12 @@ public class FormController {
 	private RoleService roleService;
 	
 	@Autowired
-	private PropertyEditorSupport propertyEditorSupport;  
+	@Qualifier(value = "rolesEditor")
+	private RolesEditor rolesEditor;
+	
+	@Autowired
+	@Qualifier(value = "paisPropertyEditor")
+	private PaisPropertyEditor propertyEditorSupport;  
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -57,6 +66,9 @@ public class FormController {
 		binder.registerCustomEditor(String.class, "nombre", new NombreEditor());
 		binder.registerCustomEditor(String.class, "apellido", new NombreEditor());
 		binder.registerCustomEditor(Pais.class, "pais", propertyEditorSupport);
+		binder.registerCustomEditor(Role.class, "roles", rolesEditor);
+		
+		
 	}
 
 	@GetMapping("/form")

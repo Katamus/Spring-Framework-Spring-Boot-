@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.bolsadeideas.springboot.form.app.services.PaisService;
 
-@Component
+@Component(value = "paisPropertyEditor")
 public class PaisPropertyEditor extends PropertyEditorSupport{
 	
 	@Autowired
