@@ -39,7 +39,7 @@ public class TiempoTranscurridoInterceptor implements HandlerInterceptor {
 		Random random = new Random();
 		Integer demora = random.nextInt(100);
 		Thread.sleep(demora);
-		
+		response.sendRedirect(request.getContextPath().concat("/login") );
 		return true;
 	}
 
