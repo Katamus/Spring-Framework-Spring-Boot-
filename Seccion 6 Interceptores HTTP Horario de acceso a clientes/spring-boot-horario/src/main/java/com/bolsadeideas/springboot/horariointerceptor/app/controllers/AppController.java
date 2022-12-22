@@ -22,16 +22,16 @@ public class AppController {
 	}
 	
 	
-	@GetMapping("cerrado")
+	@GetMapping("/cerrado")
 	public String cerrado(Model model) {
 		StringBuilder mensaje = new StringBuilder();
-		mensaje.append("Cerrado, por facor visítenos desde las ");
+		mensaje.append("Cerrado, por favor visítenos desde las ");
 		mensaje.append(apertura);
-		mensaje.append(" y las ");
+		mensaje.append(" y las  ");
 		mensaje.append(cierre);
 		mensaje.append(" hrs. Gracias. ");
 		
-		model.addAttribute("titulo", "Fueera de horario de atención");
+		model.addAttribute("titulo", "Fuera de horario de atención");
 		model.addAttribute("mensaje", mensaje.toString());
 		return "cerrado";
 	}
