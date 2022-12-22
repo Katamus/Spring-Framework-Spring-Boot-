@@ -35,7 +35,7 @@ public class HorarioInterceptor implements HandlerInterceptor {
 			mensaje.append(cierre);
 			mensaje.append("hrs. ");
 			mensaje.append(". Gracias por su visita.");
-			request.setAttribute("mensaje", mensaje.toString());
+			request.setAttribute("horario", mensaje.toString());
 			return true;
 		}
 		response.sendRedirect(request.getContextPath().concat("/cerrado"));
