@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.services.IClienteService;
@@ -38,13 +39,15 @@ public class ClienteController {
 	}
 	
 	@RequestMapping(value = "/form/{id}")
-	public String editar(@PathVariable(value = "id") Long id ,Model model) {
+	public String editar(@PathVariable(value = "id") Long id ,Model model,RedirectAttributes flash) {
 		Cliente cliente = null;
 		if(id>0) {
-			 cliente = clienteService.findOne(id);
+			flash.addFlashAttribute("error", "El id del Cliente no puede ser 0");
+			cliente = clienteService.findOne(id);
 		}
 		
 		if(cliente == null){
+			flash.addFlashAttribute("error", "El id del Cliente no existe en la BBDD");
 			return "redirect:/listar";
 		}
 		model.addAttribute("cliente", cliente);
@@ -53,21 +56,24 @@ public class ClienteController {
 	}
 	
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, SessionStatus status) {
+	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash,SessionStatus status) {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", "Litado de clientes");
 			return "form";
 		}
 		clienteService.save(cliente);
 		status.setComplete();
+		String mensaje = cliente.getId() != null ?  "Cliente Editado con exíto" : "Cliente Creado con exíto";
+		flash.addFlashAttribute("success", mensaje);
 		return "redirect:listar";
 	}
 	
 	@RequestMapping(value = "/eliminar/{id}")
-	public String eliminar(@PathVariable(value = "id") Long id ) {
+	public String eliminar(@PathVariable(value = "id") Long id,RedirectAttributes flash ) {
 		if(id > 0) {
 			clienteService.delete(id);
 		}
+		flash.addFlashAttribute("danger", "Cliente Eliminado con exíto");
 		return "redirect:/listar";
 	}
 
