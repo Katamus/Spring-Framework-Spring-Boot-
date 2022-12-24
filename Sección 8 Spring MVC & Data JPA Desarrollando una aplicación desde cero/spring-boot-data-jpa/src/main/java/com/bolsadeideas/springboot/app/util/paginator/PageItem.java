@@ -1,9 +1,8 @@
 package com.bolsadeideas.springboot.app.util.paginator;
 
 public class PageItem {
-	
+
 	private int numero;
-	
 	private boolean actual;
 
 	public PageItem(int numero, boolean actual) {
@@ -15,18 +14,7 @@ public class PageItem {
 		return numero;
 	}
 
-	public void setNumero(int numero) {
-		this.numero = numero;
-	}
-
 	public boolean isActual() {
 		return actual;
 	}
-
-	public void setActual(boolean actual) {
-		this.actual = actual;
-	}
-	
-	
-
 }

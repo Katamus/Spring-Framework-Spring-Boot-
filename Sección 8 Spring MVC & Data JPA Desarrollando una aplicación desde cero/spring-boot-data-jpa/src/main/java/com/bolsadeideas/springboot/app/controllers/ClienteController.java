@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.services.IClienteService;
+import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("cliente")
@@ -27,12 +28,16 @@ public class ClienteController {
 	@Autowired
 	private IClienteService clienteService;
 	
-	@RequestMapping(value = {"/listar","","/"}, method = RequestMethod.GET)
+	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listar(@RequestParam(name="page",defaultValue = "0") int page,Model model) {
-		Pageable pageable = PageRequest.of(page, 4);
-		Page<Cliente> clientes = clienteService.findAll(pageable);
+		Pageable pageRequest = PageRequest.of(page, 5);
+		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+		
+		PageRender<Cliente> pageRender = new PageRender<Cliente>("/listar", clientes);
+		
 		model.addAttribute("titulo", "Litado de clientes");
 		model.addAttribute("clientes", clientes);
+		model.addAttribute("page", pageRender);
 		return "listar";
 	}
 	
