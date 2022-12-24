@@ -9,12 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.services.IClienteService;
 
 @Controller
+@SessionAttributes("cliente")
 public class ClienteController {
 	
 	@Autowired
@@ -40,8 +42,10 @@ public class ClienteController {
 		Cliente cliente = null;
 		if(id>0) {
 			 cliente = clienteService.findOne(id);
-		}else {
-			return "redirect:listar";
+		}
+		
+		if(cliente == null){
+			return "redirect:/listar";
 		}
 		model.addAttribute("cliente", cliente);
 		model.addAttribute("titulo", "Editar el cliente");
