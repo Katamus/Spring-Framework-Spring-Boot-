@@ -115,7 +115,7 @@ public class ClienteController {
 				e.printStackTrace();
 			}
 			flash.addFlashAttribute("info", "Has subido correctamente '" + uniqueFileName + "'");
-			cliente.setFoto(cliente.getFoto());
+			cliente.setFoto(uniqueFileName);
 		}
 
 		clienteService.save(cliente);
