@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -108,6 +109,18 @@ public class ClienteController {
 		}
 		flash.addFlashAttribute("danger", "Cliente Eliminado con exíto");
 		return "redirect:/listar";
+	}
+	
+	@GetMapping(value = "/ver/{id}")
+	public String ver(@PathVariable(value="id") Long id, Model model, RedirectAttributes flash) {
+		Cliente cliente = clienteService.findOne(id);
+		if(cliente == null) {
+			flash.addFlashAttribute("error","El cliente no existe en la base de datos");
+			return "redirect:/listar";
+		}
+		model.addAttribute("cliente", cliente);
+		model.addAttribute("titulo", "Detalle cliente: "+ cliente.getNombre());
+		return "ver";
 	}
 
 }
