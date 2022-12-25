@@ -1,20 +1,12 @@
 package com.bolsadeideas.springboot.app.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,50 +27,48 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.services.IClienteService;
+import com.bolsadeideas.springboot.app.models.services.IUploadFileService;
 import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
-	
+
 	@Autowired
 	private IClienteService clienteService;
-	
-	
-	private final Logger log = LoggerFactory.getLogger(ClienteController.class);
-	
-	
+
+	@Autowired
+	private IUploadFileService uploadFileService;
+
 	@GetMapping(value = "/uploads/{filename:.+}")
-	public ResponseEntity<Resource> verFoto(@PathVariable String filename){
-		Path pathFoto = Paths.get("uploads").resolve(filename).toAbsolutePath();
-		log.info("pathFoto: "+pathFoto);
+	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+
 		Resource recurso = null;
 		try {
-			recurso = new UrlResource(pathFoto.toUri());
-			if(!recurso.exists() && !recurso.isReadable()) {
-				throw new RuntimeException("Error: no se puede cargar la imagen: "+pathFoto.toString());
-			}
+			recurso = uploadFileService.load(filename);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+recurso.getFilename()+"\"").body(recurso);
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+				.body(recurso);
 	}
-	
-	
+
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
-	public String listar(@RequestParam(name="page",defaultValue = "0") int page,Model model) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
-		
+
 		PageRender<Cliente> pageRender = new PageRender<Cliente>("/listar", clientes);
-		
+
 		model.addAttribute("titulo", "Litado de clientes");
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 		return "listar";
 	}
-	
+
 	@RequestMapping(value = "/form")
 	public String crear(Model model) {
 		Cliente cliente = new Cliente();
@@ -86,16 +76,16 @@ public class ClienteController {
 		model.addAttribute("titulo", "Formulario del cliente");
 		return "form";
 	}
-	
+
 	@RequestMapping(value = "/form/{id}")
-	public String editar(@PathVariable(value = "id") Long id ,Model model,RedirectAttributes flash) {
+	public String editar(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
 		Cliente cliente = null;
-		if(id>0) {
+		if (id > 0) {
 			flash.addFlashAttribute("error", "El id del Cliente no puede ser 0");
 			cliente = clienteService.findOne(id);
 		}
-		
-		if(cliente == null){
+
+		if (cliente == null) {
 			flash.addFlashAttribute("error", "El id del Cliente no existe en la BBDD");
 			return "redirect:/listar";
 		}
@@ -103,78 +93,62 @@ public class ClienteController {
 		model.addAttribute("titulo", "Editar el cliente");
 		return "form";
 	}
-	
+
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,@RequestParam("file") MultipartFile foto,RedirectAttributes flash,SessionStatus status) {
-		if(result.hasErrors()) {
+	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
+			@RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
+		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Litado de clientes");
 			return "form";
 		}
-		if(!foto.isEmpty()) {
-			
-			if( cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null && cliente.getFoto().length() > 0 ) {
-				Path rootPath = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
-				File archivo = rootPath.toFile();
-				
-				if(archivo.exists() && archivo.canRead()) {
-					if(archivo.delete()) {
-						flash.addAttribute("info", "Foto "+cliente.getFoto()+" eliminada con exito!");
-					}
-				}
+		if (!foto.isEmpty()) {
+
+			if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null
+					&& cliente.getFoto().length() > 0) {
+				uploadFileService.delete(cliente.getFoto());
 			}
-			
-			
-			String uniqueFileName = UUID.randomUUID().toString()+"_"+foto.getOriginalFilename();
-			Path rootPath = Paths.get("uploads").resolve(uniqueFileName);
-			Path rootAbsolutPath = rootPath.toAbsolutePath();
-			log.info("rootPach:"+rootPath);
-			log.info("rootAbsolutPach:"+rootAbsolutPath);
+			String uniqueFileName = null;
 			try {
-				Files.copy(foto.getInputStream(), rootAbsolutPath);
-				flash.addFlashAttribute("info", "Has subido correctamente '"+uniqueFileName+"'");
-				cliente.setFoto(uniqueFileName);
+				uniqueFileName = uploadFileService.copy(foto);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			flash.addFlashAttribute("info", "Has subido correctamente '" + uniqueFileName + "'");
+			cliente.setFoto(cliente.getFoto());
 		}
-		
+
 		clienteService.save(cliente);
 		status.setComplete();
-		String mensaje = cliente.getId() != null ?  "Cliente Editado con exíto" : "Cliente Creado con exíto";
+		String mensaje = cliente.getId() != null ? "Cliente Editado con exíto" : "Cliente Creado con exíto";
 		flash.addFlashAttribute("success", mensaje);
 		return "redirect:listar";
 	}
-	
+
 	@RequestMapping(value = "/eliminar/{id}")
-	public String eliminar(@PathVariable(value = "id") Long id,RedirectAttributes flash ) {
-		if(id > 0) {
+	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+		if (id > 0) {
 			Cliente cliente = clienteService.findOne(id);
-			flash.addFlashAttribute("danger", "Cliente Eliminado con exíto");
 			clienteService.delete(id);
-			Path rootPath = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
-			File archivo = rootPath.toFile();
-			
-			if(archivo.exists() && archivo.canRead()) {
-				if(archivo.delete()) {
-					flash.addAttribute("info", "Foto "+cliente.getFoto()+" eliminada con exito!");
-				}
+			flash.addFlashAttribute("success", "Cliente Eliminado con exíto");
+
+			if (uploadFileService.delete(cliente.getFoto())) {
+				flash.addAttribute("info", "Foto " + cliente.getFoto() + " eliminada con exito!");
 			}
 		}
 		flash.addFlashAttribute("danger", "Cliente Eliminado con exíto");
 		return "redirect:/listar";
 	}
-	
+
 	@GetMapping(value = "/ver/{id}")
-	public String ver(@PathVariable(value="id") Long id, Model model, RedirectAttributes flash) {
+	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
 		Cliente cliente = clienteService.findOne(id);
-		if(cliente == null) {
-			flash.addFlashAttribute("error","El cliente no existe en la base de datos");
+		if (cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
 			return "redirect:/listar";
 		}
 		model.addAttribute("cliente", cliente);
-		model.addAttribute("titulo", "Detalle cliente: "+ cliente.getNombre());
+		model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());
 		return "ver";
 	}
 
