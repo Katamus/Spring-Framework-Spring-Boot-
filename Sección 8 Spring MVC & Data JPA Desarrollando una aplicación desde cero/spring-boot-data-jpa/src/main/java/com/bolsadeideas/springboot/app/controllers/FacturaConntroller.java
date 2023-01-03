@@ -1,17 +1,21 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.models.entity.Factura;
+import com.bolsadeideas.springboot.app.models.entity.Producto;
 import com.bolsadeideas.springboot.app.models.services.IClienteService;
 
 @Controller
@@ -38,5 +42,11 @@ public class FacturaConntroller {
 		
 		return "factura/form";
 	}
+	
+	@GetMapping( value = "/cargar-productos/{term}", produces = {"application/json"})
+	public @ResponseBody List<Producto> cargarProductos(@PathVariable(name = "term") String term){
+		return clienteService.findByNombreProducto(term);
+	}
+	
 
 }

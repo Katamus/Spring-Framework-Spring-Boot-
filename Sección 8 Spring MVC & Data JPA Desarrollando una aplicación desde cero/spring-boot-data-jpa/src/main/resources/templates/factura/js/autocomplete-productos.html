@@ -4,7 +4,9 @@
 	<script type="text/javascript" th:fragment="javascript" >
 	
 		$(document).ready(function(){
+			
 			$("#buscar_producto").autocomplete({
+				
 				source: function(request, response){
 					$.ajax({
 						url: "/factura/cargar-productos/"+request.term,
@@ -23,7 +25,7 @@
 						},
 					})
 				},
-				select : function (event, ui){
+				select: function (event, ui){
 					$("#buscar_producto").val(ui.item.label);
 					return false;
 				}
