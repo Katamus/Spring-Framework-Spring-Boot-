@@ -11,7 +11,7 @@
 					<a class="btn btn-light btn-xs" th:href="@{/ver/}+${factura.cliente.id}" th:text="'&laquo; volver'"></a>
 				</h4>
 
-				<form action="@{/factura/form/}" th:object="${factura}"
+				<form th:action="@{/factura/form/}" th:object="${factura}"
 					method="post">
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label" th:text="'Cliente'"></label>
@@ -60,7 +60,7 @@
 					<h5 id="gran_total"></h5>
 					<div class="form-group row">
 						<div class="col-sm-6">
-							<input type="button" th:value="${titulo}"
+							<input type="submit" th:value="${titulo}"
 								class="btn btn-secondary">
 						</div>
 					</div>
