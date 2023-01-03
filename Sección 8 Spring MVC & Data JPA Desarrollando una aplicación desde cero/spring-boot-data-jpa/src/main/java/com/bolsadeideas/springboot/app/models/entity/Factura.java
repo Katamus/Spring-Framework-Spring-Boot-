@@ -25,13 +25,6 @@ import javax.persistence.TemporalType;
 @Table(name="facturas")
 public class Factura implements Serializable {
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -49,7 +42,7 @@ public class Factura implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "factura_id")
 	List<ItemFactura> items;
 	
