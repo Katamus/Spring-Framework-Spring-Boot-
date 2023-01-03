@@ -30,6 +30,26 @@
 						th:text="'Fecha ' + ${factura.createAt}"></li>
 				</ul>
 
+				<table class="table table-striped table-bordered my-3">
+					<thead>
+						<tr>
+							<th>Producto</th>
+							<th>Precio</th>
+							<th>Cantidad</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="linea : ${factura.items}">
+							<td th:text="${linea.producto.nombre}"></td>
+							<td th:text="${linea.producto.precio}"></td>
+							<td th:text="${linea.cantidad}"></td>
+							<td th:text="${linea.calcularImporte()}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<h5 class="float-right" >Gran total  <span style="background-color: gray;" class="badge badge-secondary "  th:text="${factura.total}" ></span></h5>
+
 			</div>
 		</div>
 	</div>
