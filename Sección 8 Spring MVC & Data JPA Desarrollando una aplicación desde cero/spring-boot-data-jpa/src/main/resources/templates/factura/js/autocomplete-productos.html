@@ -47,8 +47,8 @@
 	
 		var itemsHelper = {
 			calcularImporte: function(id,precio,cantidad){
-				console.log(parseInt(precio) * parseInt(cantidad));
 				$("#total_importe_"+id).html(parseInt(precio) * parseInt(cantidad));
+				this.calcularGranTotal();
 			},
 			hasProducto:function (id){
 				
@@ -69,7 +69,15 @@
 			},
 			eliminarLineaFactura: function(id){
 				$("#row_"+id).remove();
+				this.calcularGranTotal();
 				return false;
+			},
+			calcularGranTotal: function() {
+				var total = 0;
+				$('#cargarItemProductos span[id^="total_importe_"]').each(function(){
+					total += parseInt($(this).html());
+				});
+				$("#gran_total").html(total);
 			}
 		}
 	</script>
