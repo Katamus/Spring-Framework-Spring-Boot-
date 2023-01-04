@@ -40,7 +40,7 @@ public class FacturaController {
 	
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
-		Factura factura = clienteService.findFacturaById(id);
+		Factura factura = clienteService.fetchByIdWithClienteWithItemFacturaWithProducto(id); //clienteService.findFacturaById(id);
 		if( factura == null ) {
 			flash.addFlashAttribute("danger", "La factura no exite en la base de datos!");
 			return "redirect:/listar";
