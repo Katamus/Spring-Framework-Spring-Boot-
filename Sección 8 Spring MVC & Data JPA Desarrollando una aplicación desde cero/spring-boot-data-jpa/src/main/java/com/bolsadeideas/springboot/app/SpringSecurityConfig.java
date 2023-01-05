@@ -8,12 +8,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bolsadeideas.springboot.app.auth.handler.LoginSuccesHandler;
+import com.bolsadeideas.springboot.app.models.services.JpaUserDetailService;
 
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 @Configuration
@@ -28,24 +26,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 	
+	@Autowired
+	private JpaUserDetailService jpaUserDetailService;
+	
 	
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception{
-		
-		builder.jdbcAuthentication()
-		.dataSource(dataSource)
-		.passwordEncoder(passwordEncoder)
-		.usersByUsernameQuery("select  username,password,enabled from users where username=?")
-		.authoritiesByUsernameQuery("select u.username, a.authority from authorities as a inner join users as u on (u.id = a.user_id) where u.username = ?");
-		
-		/*
-		PasswordEncoder encoder = passwordEncoder;
-		UserBuilder users = User.builder().passwordEncoder(encoder::encode);
-		builder.inMemoryAuthentication()
-		.withUser(users.username("admin").password("12345").roles("ADMIN","USER"))
-		.withUser(users.username("andres").password("12345").roles("USER"))
-		;
-		*/
+		builder.userDetailsService(jpaUserDetailService)
+		.passwordEncoder(passwordEncoder);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class Usuario implements Serializable {
 	@Column(length = 250)
 	private String password;
 	
-	private Boolean enable;
+	private Boolean enabled;
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
@@ -64,13 +64,13 @@ public class Usuario implements Serializable {
 	}
 
 
-	public Boolean getEnable() {
-		return enable;
+	public Boolean getEnabled() {
+		return enabled;
 	}
 
 
-	public void setEnable(Boolean enable) {
-		this.enable = enable;
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 
