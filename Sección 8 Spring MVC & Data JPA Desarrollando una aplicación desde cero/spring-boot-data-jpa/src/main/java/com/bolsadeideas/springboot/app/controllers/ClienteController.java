@@ -16,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,6 +54,7 @@ public class ClienteController {
 	@Autowired
 	private IUploadFileService uploadFileService;
 
+	@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@GetMapping(value = "/uploads/{filename:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
 
@@ -112,6 +115,7 @@ public class ClienteController {
 		return "listar";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form")
 	public String crear(Model model) {
 		Cliente cliente = new Cliente();
@@ -120,6 +124,7 @@ public class ClienteController {
 		return "form";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/form/{id}")
 	public String editar(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
 		Cliente cliente = null;
@@ -137,6 +142,7 @@ public class ClienteController {
 		return "form";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
 			@RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
@@ -168,6 +174,7 @@ public class ClienteController {
 		return "redirect:listar";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
@@ -183,6 +190,7 @@ public class ClienteController {
 		return "redirect:/listar";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
 		Cliente cliente = clienteService.fetchByIdWithFacturas(id);
