@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.view.pdf;
 
+import java.awt.Color;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import com.bolsadeideas.springboot.app.models.entity.Factura;
 import com.bolsadeideas.springboot.app.models.entity.ItemFactura;
 import com.lowagie.text.Document;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfCell;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -27,19 +29,33 @@ public class FacturaPdfView extends AbstractPdfView{
 		
 		PdfPTable table = new PdfPTable(1);
 		table.setSpacingAfter(20);
-		table.addCell("Datos del Cliente");
+		
+		PdfPCell cell = null;
+		cell = new PdfPCell(new Phrase("Datos del Cliente"));
+		cell.setBackgroundColor(new Color(184,218,255));
+		cell.setPadding(8f);
+		table.addCell(cell);
+		
+		
+		
 		table.addCell(factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
 		table.addCell(factura.getCliente().getEmail());
 		
 		PdfPTable table2 = new PdfPTable(1);
 		table2.setSpacingAfter(20);
-		table2.addCell("Datos de la Factura");
+		
+		cell = new PdfPCell(new Phrase("Datos de la Factura"));
+		cell.setBackgroundColor(new Color(195,230,203));
+		cell.setPadding(8f);
+		
+		table2.addCell(cell);
 		table2.addCell("Folio: "+ factura.getId());
 		table2.addCell("Descripción: "+ factura.getDescripcion());
 		table2.addCell("Fecha: "+ factura.getCreateAt());
 		
 		
 		PdfPTable table3 = new PdfPTable(4);
+		table3.setWidths(new float[] {3.5f,1,1,1});
 		table3.addCell("Producto");
 		table3.addCell("Precio");
 		table3.addCell("Cantidad");
@@ -48,11 +64,14 @@ public class FacturaPdfView extends AbstractPdfView{
 		for(ItemFactura itemFactura : factura.getItems()) {
 			table3.addCell(itemFactura.getProducto().getNombre());
 			table3.addCell(itemFactura.getProducto().getPrecio().toString());
-			table3.addCell(itemFactura.getCantidad().toString());
+			
+			cell = new PdfPCell(new Phrase(itemFactura.getCantidad().toString()));
+			cell.setHorizontalAlignment(PdfCell.ALIGN_CENTER);
+			table3.addCell(cell);
 			table3.addCell(itemFactura.calcularImporte().toString());
 		}
 		
-		PdfPCell cell = new PdfPCell(new Phrase("Total: "));
+		cell = new PdfPCell(new Phrase("Total: "));
 		cell.setColspan(3);
 		cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 		table3.addCell(cell);
