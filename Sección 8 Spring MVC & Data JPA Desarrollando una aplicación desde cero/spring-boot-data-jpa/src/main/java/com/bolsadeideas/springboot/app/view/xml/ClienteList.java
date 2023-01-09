@@ -15,7 +15,7 @@ public class ClienteList {
 
 	public ClienteList() {
 	}
-
+	
 	public ClienteList(List<Cliente> clientes) {
 		this.clientes = clientes;
 	}
@@ -23,9 +23,6 @@ public class ClienteList {
 	public List<Cliente> getClientes() {
 		return clientes;
 	}
-
-	public void setClientes(List<Cliente> clientes) {
-		this.clientes = clientes;
-	}
-
+	
+	
 }
