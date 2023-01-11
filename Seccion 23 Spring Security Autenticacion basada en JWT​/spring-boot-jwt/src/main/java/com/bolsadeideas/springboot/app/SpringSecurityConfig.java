@@ -39,21 +39,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().antMatchers("/","/css/**","/js/**","/images/**","/listar**","/locale","/api/clientes/**").permitAll()
+		http.authorizeHttpRequests().antMatchers("/","/css/**","/js/**","/images/**","/listar**","/locale").permitAll()
 		/*.antMatchers("/ver/**").hasAnyRole("USER")*/
 		/*.antMatchers("/uploads/**").hasAnyRole("USER")
 		.antMatchers("/form/**").hasAnyRole("ADMIN")
 		.antMatchers("/eliminar/**").hasAnyRole("ADMIN")
 		.antMatchers("/factura/**").hasAnyRole("ADMIN")*/
 		.anyRequest().authenticated()
-		.and()
+		/*.and()
 		.formLogin()
 			.successHandler(succesHandler)
 			.loginPage("/login").permitAll()
 		.and()
 		.logout().permitAll()
 		.and()
-		.exceptionHandling().accessDeniedPage("/error_403")
+		.exceptionHandling().accessDeniedPage("/error_403")*/
 		.and()
 		.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
