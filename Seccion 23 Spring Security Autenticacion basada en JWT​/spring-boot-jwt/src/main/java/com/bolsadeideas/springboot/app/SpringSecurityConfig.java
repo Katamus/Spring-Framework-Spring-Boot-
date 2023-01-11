@@ -11,12 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.bolsadeideas.springboot.app.auth.filter.JWTAuthenticationFilter;
 import com.bolsadeideas.springboot.app.auth.handler.LoginSuccesHandler;
 import com.bolsadeideas.springboot.app.models.services.JpaUserDetailService;
 
-@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 @Configuration
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter  {
 	
 	@Autowired
 	private LoginSuccesHandler succesHandler;
@@ -55,6 +56,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.exceptionHandling().accessDeniedPage("/error_403")*/
 		.and()
+		.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 		.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 	}
