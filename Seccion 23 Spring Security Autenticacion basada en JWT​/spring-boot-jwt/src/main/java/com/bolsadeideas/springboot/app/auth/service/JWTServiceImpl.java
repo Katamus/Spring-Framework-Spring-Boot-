@@ -22,6 +22,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JWTServiceImpl implements JWTService {
+	
+	
+	public static final String SECRET = "alguna.clave.secreta.clave.secreta.clave.secreta.clave.secreta.clave.secreta";
+	
+	public static final long EXPIRATION_DATE = 14000000L;
+	
+	public static final String TOKEM_PREFIX = "Bearer ";
+	
+	public static final String HEADER_STRING = "Authorization";
+	
 
 	@Override
 	public String create(Authentication authResult	) throws JsonProcessingException {
@@ -33,9 +43,9 @@ public class JWTServiceImpl implements JWTService {
 		String token =Jwts.builder()
 				.setClaims(claims)
 				.setSubject(username)
-				.signWith(SignatureAlgorithm.HS512,"alguna.clave.secreta.clave.secreta.clave.secreta.clave.secreta.clave.secreta".getBytes())
+				.signWith(SignatureAlgorithm.HS512,SECRET.getBytes())
 				.setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis()+(3600000*4)))
+				.setExpiration(new Date(System.currentTimeMillis()+EXPIRATION_DATE))
 				.compact();
 		
 		return token;
@@ -54,7 +64,7 @@ public class JWTServiceImpl implements JWTService {
 	@Override
 	public Claims getClaims(String token) {
 		return Jwts.parser()
-				.setSigningKey("alguna.clave.secreta.clave.secreta.clave.secreta.clave.secreta.clave.secreta".getBytes())
+				.setSigningKey(SECRET.getBytes())
 				.parseClaimsJws(resolve(token)).getBody();
 	}
 
@@ -76,8 +86,8 @@ public class JWTServiceImpl implements JWTService {
 
 	@Override
 	public String resolve(String token) {
-		if(token != null && token.startsWith("Bearer ")) {
-			return token.replace("Bearer ", "");
+		if(token != null && token.startsWith(TOKEM_PREFIX)) {
+			return token.replace(TOKEM_PREFIX, "");
 		}
 		return null;
 	}
