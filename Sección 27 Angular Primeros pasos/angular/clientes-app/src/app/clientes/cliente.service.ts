@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 import { CLIENTES } from "./clientes.json";
-import { Observable,of } from 'rxjs';
+import { map, Observable,of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -30,6 +30,10 @@ export class ClienteService {
 
   update(cliente:Cliente):Observable<Cliente>{
     return this.http.put<Cliente>(`${this.urlEndPoint}/${cliente.id}`,cliente,{headers:this.httpHeaders});
+  }
+
+  delete(id:number):Observable<number>{
+    return this.http.delete<number>(`${this.urlEndPoint}/${id}`,{headers:this.httpHeaders}).pipe(map(project=>id));
   }
 
 }
