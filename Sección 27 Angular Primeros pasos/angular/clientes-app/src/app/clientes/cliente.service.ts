@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class ClienteService {
 
   
-  private urlEndPoint:string = 'localhost:8080/api/clientes';
+  private urlEndPoint:string = 'api/clientes';
 
   constructor(private http:HttpClient) { }
 
