@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import Swal from 'sweetalert2'
+import { tap } from 'rxjs';
 
 
 @Component({
@@ -16,7 +17,12 @@ export class ClientesComponent implements OnInit {
   constructor( private clienteService:ClienteService) { }
 
   ngOnInit(): void {
-    this.clienteService.getClientes().subscribe(data=>this.clientes = data);
+    this.clienteService.getClientes().pipe(
+      tap(cliente=>{
+        console.log("Log desde componente");
+        console.log(cliente);
+      })
+    ).subscribe(data=>this.clientes = data);
   }
 
   delete(cliente:Cliente):void {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { formatDate,DatePipe } from '@angular/common';
 import { Cliente } from './cliente';
-import { map, Observable,catchError, throwError } from 'rxjs';
+import { map, Observable,catchError, throwError,tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router'
@@ -29,6 +29,9 @@ export class ClienteService {
           //cliente.createAt = datePipe.transform(cliente.createAt,'EEEE dd, MMMM yyyy');//formatDate(cliente.createAt,'dd-MM-yyyy','en-US');
           return cliente;
         })
+      }),
+      tap(response=>{
+        response.forEach(console.log);
       })
     );
   }
