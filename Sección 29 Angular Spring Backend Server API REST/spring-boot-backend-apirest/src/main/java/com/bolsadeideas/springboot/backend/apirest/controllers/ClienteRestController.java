@@ -48,19 +48,27 @@ public class ClienteRestController {
 		}
 		
 		if( cliente == null) {
-			
-			if(cliente == null ) {
-				response.put("mensaje","El cliente ID; ".concat(id.toString().concat(" no existeen la base de datos!")));
-				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
-			}
+			response.put("mensaje","El cliente ID; ".concat(id.toString().concat(" no existeen la base de datos!")));
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Cliente>(cliente,HttpStatus.OK);
 	}
 	
 	@PostMapping("/clientes")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente create(@RequestBody Cliente cliente) {
-		return clienteService.save(cliente);
+	public ResponseEntity<?> create(@RequestBody Cliente cliente) {
+		Map<String, Object> response = new HashMap<>();
+		Cliente clienteNew = null;
+		try {
+			clienteNew  = clienteService.save(cliente);
+		} catch (DataAccessException e) {
+			response.put("mensaje","Error al realizar la consulta a la base de datos ");
+			response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().toString()));
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CONFLICT);
+		}
+		response.put("mensaje", "El cliente ha sido creado con éxito");
+		response.put("cliente", clienteNew);;
+		return new ResponseEntity<>( response  ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/clientes/{id}")
