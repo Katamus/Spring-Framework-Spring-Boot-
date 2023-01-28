@@ -64,7 +64,7 @@ public class ClienteRestController {
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
-			List<String>  errors = result.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
+			List<String>  errors = result.getFieldErrors().stream().map(x ->"El campo "+x.getField()+" genero el siguiente error: "+x.getDefaultMessage()).toList();
 			response.put("errors",  errors);
 			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 		}
