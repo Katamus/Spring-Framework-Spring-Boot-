@@ -65,7 +65,7 @@ public class ClienteRestController {
 		
 		if(result.hasErrors()) {
 			List<String>  errors = result.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
-			response.put("errors", errors);
+			response.put("errors",  errors);
 			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 		}
 		

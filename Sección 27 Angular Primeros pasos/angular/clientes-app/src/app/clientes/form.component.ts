@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 export class FormComponent implements OnInit {
 
   public cliente:Cliente = new Cliente();
-  private errors: string[] = [];
+  public errors: string[] = [];
 
   public titulo:string = "";
 
