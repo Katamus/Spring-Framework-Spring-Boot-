@@ -48,7 +48,7 @@ public class ClienteRestController {
 		}
 		
 		if( cliente == null) {
-			response.put("mensaje","El cliente ID; ".concat(id.toString().concat(" no existeen la base de datos!")));
+			response.put("mensaje","El cliente ID: ".concat(id.toString().concat(" no existeen la base de datos!")));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Cliente>(cliente,HttpStatus.OK);
