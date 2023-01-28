@@ -17,7 +17,15 @@ export class ClienteService {
   constructor(private http:HttpClient, private router:Router) { }
 
   getClientes():Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.urlEndPoint);
+    return this.http.get<Cliente[]>(this.urlEndPoint).pipe(
+      map(response =>{
+        let cliente = response;
+        return cliente.map(cliente =>{
+          cliente.nombre = cliente.nombre.toLocaleUpperCase();
+          return cliente;
+        })
+      })
+    );
   }
 
   create(cliente:Cliente): Observable<Cliente>{
