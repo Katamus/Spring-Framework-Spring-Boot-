@@ -64,21 +64,40 @@ public class ClienteRestController {
 		} catch (DataAccessException e) {
 			response.put("mensaje","Error al realizar la consulta a la base de datos ");
 			response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().toString()));
-			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CONFLICT);
+			return new ResponseEntity<>(response,HttpStatus.CONFLICT);
 		}
 		response.put("mensaje", "El cliente ha sido creado con éxito");
-		response.put("cliente", clienteNew);;
+		response.put("cliente", clienteNew);
 		return new ResponseEntity<>( response  ,HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/clientes/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente update(@RequestBody Cliente cliente,@PathVariable Long id) {
+	public ResponseEntity<?> update(@RequestBody Cliente cliente,@PathVariable Long id) {
 		Cliente clienteActual = clienteService.findById(id);
-		clienteActual.setApellido(cliente.getApellido());
-		clienteActual.setNombre(cliente.getNombre());
-		clienteActual.setEmail(cliente.getEmail());
-		return clienteService.save(clienteActual);
+		Cliente clienteUpdated = null;
+		Map<String,Object> response = new HashMap<>();
+		
+		if(clienteActual == null) {
+			response.put("mensaje","Error: no se puede editar, el cliente ID; ".concat(id.toString().concat(" no existeen la base de datos!")));
+			return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+		}
+		try {
+			clienteActual.setApellido(cliente.getApellido());
+			clienteActual.setNombre(cliente.getNombre());
+			clienteActual.setEmail(cliente.getEmail());
+			clienteUpdated = clienteService.save(clienteActual);
+			
+		} catch (DataAccessException e) {
+			response.put("mensaje","Error al realizar la consulta a la base de datos ");
+			response.put("error",e.getMessage().concat(": ").concat(e.getMostSpecificCause().toString()));
+			return new ResponseEntity<>(response,HttpStatus.CONFLICT);
+		}
+		
+		response.put("mensaje", "El cliente ha sido actualizado con éxito");
+		response.put("cliente", clienteUpdated);
+		
+		return new ResponseEntity<>( response  ,HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/clientes/{id}")
