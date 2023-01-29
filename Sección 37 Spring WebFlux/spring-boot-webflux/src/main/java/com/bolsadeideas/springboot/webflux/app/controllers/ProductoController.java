@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 
-import com.bolsadeideas.springboot.webflux.app.SpringBootWebfluxApplication;
 import com.bolsadeideas.springboot.webflux.app.models.dao.ProductoDao;
 import com.bolsadeideas.springboot.webflux.app.models.documents.Producto;
 
